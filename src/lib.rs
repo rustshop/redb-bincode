@@ -241,7 +241,6 @@ where
     ) -> Result<Option<AccessGuard<'_, V>>, StorageError>
     where
         K: Borrow<KQ>,
-        V: Borrow<VQ>,
         KQ: bincode::Encode + ?Sized,
         VQ: bincode::Encode + ?Sized,
     {
