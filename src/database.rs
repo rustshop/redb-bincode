@@ -24,6 +24,14 @@ impl Database {
     pub fn begin_write(&self) -> Result<tx::WriteTransaction, TransactionError> {
         Ok(WriteTransaction::from(self.0.begin_write()?))
     }
+
+    /// Get the inner [`redb::Database`]
+    pub fn as_raw(&self) -> &redb::Database {
+        &self.0
+    }
+    pub fn as_raw_mut(&mut self) -> &mut redb::Database {
+        &mut self.0
+    }
 }
 
 impl From<redb::Database> for Database {
