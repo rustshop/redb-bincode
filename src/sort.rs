@@ -27,9 +27,15 @@ impl<T> redb::Value for SortKey<T>
 where
     T: SortOrder + fmt::Debug,
 {
-    type SelfType<'a> = &'a [u8] where Self: 'a;
+    type SelfType<'a>
+        = &'a [u8]
+    where
+        Self: 'a;
 
-    type AsBytes<'a> = &'a [u8] where Self: 'a;
+    type AsBytes<'a>
+        = &'a [u8]
+    where
+        Self: 'a;
 
     fn fixed_width() -> Option<usize> {
         None

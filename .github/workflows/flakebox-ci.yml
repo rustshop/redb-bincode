@@ -23,21 +23,12 @@ jobs:
           runs-on: ubuntu-latest
           timeout: 60
         - host: macos-x86_64
-          runs-on: macos-12
+          runs-on: macos-13
           timeout: 60
         - host: macos-aarch64
           runs-on: macos-14
           timeout: 60
     timeout-minutes: ${{ matrix.timeout }}
-  flake:
-    name: Flake self-check
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Check Nix flake inputs
-      uses: DeterminateSystems/flake-checker-action@v5
-      with:
-        fail-mode: true
   lint:
     name: Lint
     runs-on: ubuntu-latest

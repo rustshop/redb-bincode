@@ -21,6 +21,13 @@ fn main() -> anyhow::Result<()> {
                 bar: "bar".into(),
             },
         )?;
+        table.insert(
+            &String::from("bar"),
+            &Something {
+                foo: 15u64,
+                bar: "bar".into(),
+            },
+        )?;
     }
     write_txn.commit()?;
 

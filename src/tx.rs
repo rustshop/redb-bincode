@@ -57,7 +57,12 @@ impl<'a, K, V> TableDefinition<'a, K, V> {
             _value_type: PhantomData,
         }
     }
+
+    pub fn as_raw(&self) -> redb::TableDefinition<'_, &'static [u8], &'static [u8]> {
+        redb::TableDefinition::new(self.name)
+    }
 }
+
 impl WriteTransaction {
     pub fn as_raw(&self) -> &redb::WriteTransaction {
         &self.0
