@@ -53,7 +53,7 @@ where
         )
     }
 }
-impl<'a, K, V> DoubleEndedIterator for Range<'a, K, V, &'static [u8]> {
+impl<K, V> DoubleEndedIterator for Range<'_, K, V, &'static [u8]> {
     fn next_back(&mut self) -> Option<Self::Item> {
         Some(
             self.inner
@@ -63,7 +63,7 @@ impl<'a, K, V> DoubleEndedIterator for Range<'a, K, V, &'static [u8]> {
     }
 }
 
-impl<'a, S, K, V> DoubleEndedIterator for Range<'a, K, V, SortKey<S>>
+impl<S, K, V> DoubleEndedIterator for Range<'_, K, V, SortKey<S>>
 where
     S: SortOrder + fmt::Debug,
 {

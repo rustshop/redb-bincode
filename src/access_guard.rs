@@ -32,9 +32,9 @@ where
     }
 }
 
-impl<'a, V> AccessGuard<'a, V>
+impl<V> AccessGuard<'_, V>
 where
-    V: bincode::Decode,
+    V: bincode::Decode<()>,
 {
     pub fn value(&self) -> V {
         self.value_try().expect("Invalid encoding")
@@ -45,9 +45,9 @@ where
     }
 }
 
-impl<'a, V, S> AccessGuard<'a, V, SortKey<S>>
+impl<V, S> AccessGuard<'_, V, SortKey<S>>
 where
-    V: bincode::Decode,
+    V: bincode::Decode<()>,
     S: SortOrder + fmt::Debug,
 {
     pub fn value(&self) -> V {

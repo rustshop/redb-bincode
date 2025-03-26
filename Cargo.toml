@@ -1,6 +1,6 @@
 [package]
 name = "redb-bincode"
-version = "0.2.2"
+version = "0.3.0"
 edition = "2021"
 license = "MPL-2.0"
 authors = ["Dawid Ciężarkiewicz <dpc@dpc.pw>"]
@@ -13,7 +13,7 @@ repository = "https://github.com/rustshop/redb-bincode"
 
 [dependencies]
 redb = "2.0.0"
-bincode = "2.0.0-rc.3"
+bincode = "2.0.0"
 thiserror = "1.0.58"
 
 [dev-dependencies]
