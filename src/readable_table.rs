@@ -10,8 +10,8 @@ use crate::{AccessGuard, Lexicographical, Range, ReadOnlyTable, SortKey, SortOrd
 pub trait ReadableTable<K, V, S = Lexicographical>
 where
     S: SortOrder + fmt::Debug + 'static,
-    K: bincode::Encode + bincode::Decode,
-    V: bincode::Encode + bincode::Decode,
+    K: bincode::Encode + bincode::Decode<()>,
+    V: bincode::Encode + bincode::Decode<()>,
 {
     #[allow(clippy::type_complexity)]
     fn first(
@@ -40,8 +40,8 @@ where
 impl<K, V, S> ReadableTable<K, V, S> for ReadOnlyTable<K, V, S>
 where
     S: SortOrder + fmt::Debug + 'static,
-    K: bincode::Encode + bincode::Decode,
-    V: bincode::Encode + bincode::Decode,
+    K: bincode::Encode + bincode::Decode<()>,
+    V: bincode::Encode + bincode::Decode<()>,
 {
     #[allow(clippy::type_complexity)]
     fn first(
@@ -77,11 +77,11 @@ where
     }
 }
 
-impl<'txn, K, V, S> ReadableTable<K, V, S> for Table<'txn, K, V, S>
+impl<K, V, S> ReadableTable<K, V, S> for Table<'_, K, V, S>
 where
     S: SortOrder + fmt::Debug + 'static,
-    K: bincode::Encode + bincode::Decode,
-    V: bincode::Encode + bincode::Decode,
+    K: bincode::Encode + bincode::Decode<()>,
+    V: bincode::Encode + bincode::Decode<()>,
 {
     #[allow(clippy::type_complexity)]
     fn first(

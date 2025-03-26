@@ -22,8 +22,8 @@ impl ReadTransaction {
         table_def: &TableDefinition<'_, K, V>,
     ) -> Result<ReadOnlyTable<K, V, sort::Lexicographical>, TableError>
     where
-        K: bincode::Encode + bincode::Decode,
-        V: bincode::Encode + bincode::Decode,
+        K: bincode::Encode + bincode::Decode<()>,
+        V: bincode::Encode + bincode::Decode<()>,
     {
         Ok(ReadOnlyTable {
             inner: self
@@ -73,8 +73,8 @@ impl WriteTransaction {
         table_def: &TableDefinition<'_, K, V>,
     ) -> Result<Table<K, V, sort::Lexicographical>, TableError>
     where
-        K: bincode::Encode + bincode::Decode,
-        V: bincode::Encode + bincode::Decode,
+        K: bincode::Encode + bincode::Decode<()>,
+        V: bincode::Encode + bincode::Decode<()>,
     {
         Ok(Table {
             inner: self

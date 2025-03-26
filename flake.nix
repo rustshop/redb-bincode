@@ -3,7 +3,7 @@
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    flakebox.url = "github:rustshop/flakebox?rev=a18deb3f4b8ebe28b4c075cc3131584d800f54de";
+    flakebox.url = "github:rustshop/flakebox?rev=5e9ce550fb989f1311547ee09301315cc311ba3b";
   };
 
   outputs =

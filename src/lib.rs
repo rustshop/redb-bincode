@@ -72,8 +72,8 @@ where
 impl<K, V, S> ReadOnlyTable<K, V, S>
 where
     S: SortOrder + fmt::Debug + 'static,
-    K: bincode::Encode + bincode::Decode,
-    V: bincode::Encode + bincode::Decode,
+    K: bincode::Encode + bincode::Decode<()>,
+    V: bincode::Encode + bincode::Decode<()>,
 {
     pub fn as_raw(&self) -> &redb::ReadOnlyTable<sort::SortKey<S>, &'static [u8]> {
         &self.inner
@@ -158,8 +158,8 @@ where
 impl<'txn, K, V, S> Table<'txn, K, V, S>
 where
     S: SortOrder + fmt::Debug + 'static,
-    K: bincode::Encode + bincode::Decode,
-    V: bincode::Encode + bincode::Decode,
+    K: bincode::Encode + bincode::Decode<()>,
+    V: bincode::Encode + bincode::Decode<()>,
 {
     pub fn as_raw(&self) -> &redb::Table<sort::SortKey<S>, &'static [u8]> {
         &self.inner

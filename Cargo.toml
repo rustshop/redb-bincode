@@ -13,7 +13,7 @@ repository = "https://github.com/rustshop/redb-bincode"
 
 [dependencies]
 redb = "2.0.0"
-bincode = "2.0.0-rc.3"
+bincode = "2.0.0"
 thiserror = "1.0.58"
 
 [dev-dependencies]
