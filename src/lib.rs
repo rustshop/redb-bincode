@@ -16,6 +16,7 @@ pub use access_guard::*;
 pub use database::*;
 pub use range::*;
 pub use readable_table::*;
+pub use redb;
 use redb::ReadableTable as _;
 pub use redb::StorageError;
 pub use sort::*;
