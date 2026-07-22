@@ -27,6 +27,16 @@ pub const BINCODE_CONFIG: bincode::config::Configuration<bincode::config::BigEnd
         .with_big_endian()
         .with_variable_int_encoding();
 
+fn decode_exact<T: bincode::Decode<()>>(bytes: &[u8]) -> Result<T, bincode::error::DecodeError> {
+    let (value, consumed) = bincode::decode_from_slice(bytes, BINCODE_CONFIG)?;
+    if consumed != bytes.len() {
+        return Err(bincode::error::DecodeError::Other(
+            "Trailing bytes after encoded value",
+        ));
+    }
+    Ok(value)
+}
+
 thread_local! {
     pub static ENCODE_KEY: std::cell::UnsafeCell<Vec<u8>> = const { std::cell::UnsafeCell::new(vec![]) };
     pub static ENCODE_VALUE: std::cell::UnsafeCell<Vec<u8>> = const { std::cell::UnsafeCell::new(vec![]) };
@@ -284,12 +294,8 @@ where
         F: for<'f> FnMut(&'f K, &'f V) -> bool,
     {
         self.inner.retain(|raw_key, raw_val| {
-            let k = bincode::decode_from_slice(raw_key, BINCODE_CONFIG)
-                .map(|k| k.0)
-                .expect("Invalid encoding");
-            let v = bincode::decode_from_slice(raw_val, BINCODE_CONFIG)
-                .map(|v| v.0)
-                .expect("Invalid encoding");
+            let k = decode_exact(raw_key).expect("Invalid encoding");
+            let v = decode_exact(raw_val).expect("Invalid encoding");
             predicate(&k, &v)
         })
     }
@@ -322,12 +328,8 @@ where
                     let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
                     self.inner
                         .retain_in((start_bound, end_bound), |raw_key, raw_val| {
-                            let k = bincode::decode_from_slice(raw_key, BINCODE_CONFIG)
-                                .map(|k| k.0)
-                                .expect("Invalid encoding");
-                            let v = bincode::decode_from_slice(raw_val, BINCODE_CONFIG)
-                                .map(|v| v.0)
-                                .expect("Invalid encoding");
+                            let k = decode_exact(raw_key).expect("Invalid encoding");
+                            let v = decode_exact(raw_val).expect("Invalid encoding");
                             predicate(&k, &v)
                         })?;
 

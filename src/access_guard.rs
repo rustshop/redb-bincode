@@ -1,7 +1,7 @@
 use std::fmt;
 use std::marker::PhantomData;
 
-use crate::{SortKey, SortOrder, BINCODE_CONFIG};
+use crate::{decode_exact, SortKey, SortOrder};
 
 pub struct AccessGuard<'a, V, IV = &'static [u8]>
 where
@@ -41,7 +41,7 @@ where
     }
 
     pub fn value_try(&self) -> Result<V, bincode::error::DecodeError> {
-        bincode::decode_from_slice(self.inner.value(), BINCODE_CONFIG).map(|v| v.0)
+        decode_exact(self.inner.value())
     }
 }
 
@@ -55,6 +55,6 @@ where
     }
 
     pub fn value_try(&self) -> Result<V, bincode::error::DecodeError> {
-        bincode::decode_from_slice(self.inner.value(), BINCODE_CONFIG).map(|v| v.0)
+        decode_exact(self.inner.value())
     }
 }

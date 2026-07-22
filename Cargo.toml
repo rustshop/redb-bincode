@@ -18,6 +18,7 @@ thiserror = "1.0.58"
 
 [dev-dependencies]
 anyhow = "1.0.81"
+tempfile = "3"
 
 [profile.dev]
 debug = "line-tables-only"
