@@ -4,11 +4,13 @@ mod access_guard;
 mod database;
 mod range;
 mod readable_table;
+mod scratch_buffer;
+#[cfg(test)]
+mod scratch_buffer_tests;
 mod sort;
 mod tx;
 
 use std::borrow::Borrow;
-use std::cell::UnsafeCell;
 use std::marker::PhantomData;
 use std::{fmt, ops};
 
@@ -21,6 +23,8 @@ use redb::ReadableTable as _;
 pub use redb::StorageError;
 pub use sort::*;
 pub use tx::*;
+
+use crate::scratch_buffer::{with_encode_key_buf, with_encode_value_buf};
 
 pub const BINCODE_CONFIG: bincode::config::Configuration<bincode::config::BigEndian> =
     bincode::config::standard()
@@ -35,40 +39,6 @@ fn decode_exact<T: bincode::Decode<()>>(bytes: &[u8]) -> Result<T, bincode::erro
         ));
     }
     Ok(value)
-}
-
-thread_local! {
-    pub static ENCODE_KEY: std::cell::UnsafeCell<Vec<u8>> = const { std::cell::UnsafeCell::new(vec![]) };
-    pub static ENCODE_VALUE: std::cell::UnsafeCell<Vec<u8>> = const { std::cell::UnsafeCell::new(vec![]) };
-}
-
-unsafe fn with_encode_key_buf<R>(f: impl FnOnce(&mut Vec<u8>) -> R) -> R {
-    // https://doc.rust-lang.org/std/cell/struct.UnsafeCell.html#memory-layout
-    #[allow(clippy::mut_from_ref)]
-    unsafe fn get_mut<T>(ptr: &UnsafeCell<T>) -> &mut T {
-        unsafe { &mut *ptr.get() }
-    }
-
-    ENCODE_KEY.with(|buf| {
-        let buf = unsafe { get_mut(buf) };
-        let res = f(buf);
-        buf.clear();
-        res
-    })
-}
-unsafe fn with_encode_value_buf<R>(f: impl FnOnce(&mut Vec<u8>) -> R) -> R {
-    // https://doc.rust-lang.org/std/cell/struct.UnsafeCell.html#memory-layout
-    #[allow(clippy::mut_from_ref)]
-    unsafe fn get_mut<T>(ptr: &UnsafeCell<T>) -> &mut T {
-        unsafe { &mut *ptr.get() }
-    }
-
-    ENCODE_VALUE.with(|buf| {
-        let buf = unsafe { get_mut(buf) };
-        let res = f(buf);
-        buf.clear();
-        res
-    })
 }
 
 pub struct ReadOnlyTable<K, V, S = Lexicographical>
@@ -120,26 +90,23 @@ where
         K: Borrow<Q>,
         Q: bincode::Encode + ?Sized,
     {
-        let redb_range = unsafe {
-            with_encode_key_buf(|start_bound_buf| {
-                let start_bound_size = range.start_bound().map(|bound| {
-                    bincode::encode_into_std_write(bound, start_bound_buf, BINCODE_CONFIG)
+        let redb_range = with_encode_key_buf(|start_bound_buf| {
+            let start_bound_size = range.start_bound().map(|bound| {
+                bincode::encode_into_std_write(bound, start_bound_buf, BINCODE_CONFIG)
+                    .expect("encoding can't fail")
+            });
+
+            with_encode_value_buf(|end_bound_buf| {
+                let end_bound_size = range.end_bound().map(|bound| {
+                    bincode::encode_into_std_write(bound, end_bound_buf, BINCODE_CONFIG)
                         .expect("encoding can't fail")
                 });
 
-                with_encode_value_buf(|end_bound_buf| {
-                    let end_bound_size = range.end_bound().map(|bound| {
-                        bincode::encode_into_std_write(bound, end_bound_buf, BINCODE_CONFIG)
-                            .expect("encoding can't fail")
-                    });
-
-                    let start_bound =
-                        start_bound_size.map(|size| SortKey(&start_bound_buf[..size]));
-                    let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
-                    self.inner.range((start_bound, end_bound))
-                })
-            })?
-        };
+                let start_bound = start_bound_size.map(|size| SortKey(&start_bound_buf[..size]));
+                let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
+                self.inner.range((start_bound, end_bound))
+            })
+        })?;
         Ok(Range::from(redb_range))
     }
 
@@ -148,14 +115,12 @@ where
         K: Borrow<Q>,
         Q: bincode::Encode + ?Sized,
     {
-        unsafe {
-            Ok(with_encode_key_buf(|buf| {
-                let size = bincode::encode_into_std_write(key, buf, BINCODE_CONFIG)
-                    .expect("encoding can't fail");
-                self.inner.get(&buf[..size])
-            })?
-            .map(AccessGuard::from))
-        }
+        Ok(with_encode_key_buf(|buf| {
+            let size = bincode::encode_into_std_write(key, buf, BINCODE_CONFIG)
+                .expect("encoding can't fail");
+            self.inner.get(&buf[..size])
+        })?
+        .map(AccessGuard::from))
     }
 }
 
@@ -211,26 +176,23 @@ where
         K: Borrow<Q>,
         Q: bincode::Encode + ?Sized,
     {
-        let redb_range = unsafe {
-            with_encode_key_buf(|start_bound_buf| {
-                let start_bound_size = range.start_bound().map(|bound| {
-                    bincode::encode_into_std_write(bound, start_bound_buf, BINCODE_CONFIG)
+        let redb_range = with_encode_key_buf(|start_bound_buf| {
+            let start_bound_size = range.start_bound().map(|bound| {
+                bincode::encode_into_std_write(bound, start_bound_buf, BINCODE_CONFIG)
+                    .expect("encoding can't fail")
+            });
+
+            with_encode_value_buf(|end_bound_buf| {
+                let end_bound_size = range.end_bound().map(|bound| {
+                    bincode::encode_into_std_write(bound, end_bound_buf, BINCODE_CONFIG)
                         .expect("encoding can't fail")
                 });
 
-                with_encode_value_buf(|end_bound_buf| {
-                    let end_bound_size = range.end_bound().map(|bound| {
-                        bincode::encode_into_std_write(bound, end_bound_buf, BINCODE_CONFIG)
-                            .expect("encoding can't fail")
-                    });
-
-                    let start_bound =
-                        start_bound_size.map(|size| SortKey(&start_bound_buf[..size]));
-                    let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
-                    self.inner.range((start_bound, end_bound))
-                })
-            })?
-        };
+                let start_bound = start_bound_size.map(|size| SortKey(&start_bound_buf[..size]));
+                let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
+                self.inner.range((start_bound, end_bound))
+            })
+        })?;
         Ok(Range::from(redb_range))
     }
 
@@ -239,14 +201,12 @@ where
         K: Borrow<Q>,
         Q: bincode::Encode + ?Sized,
     {
-        unsafe {
-            Ok(with_encode_key_buf(|buf| {
-                let size = bincode::encode_into_std_write(key, buf, BINCODE_CONFIG)
-                    .expect("encoding can't fail");
-                self.inner.get(&buf[..size])
-            })?
-            .map(AccessGuard::from))
-        }
+        Ok(with_encode_key_buf(|buf| {
+            let size = bincode::encode_into_std_write(key, buf, BINCODE_CONFIG)
+                .expect("encoding can't fail");
+            self.inner.get(&buf[..size])
+        })?
+        .map(AccessGuard::from))
     }
 
     pub fn insert<KQ, VQ>(
@@ -260,21 +220,18 @@ where
         KQ: bincode::Encode + ?Sized,
         VQ: bincode::Encode + ?Sized,
     {
-        Ok(unsafe {
-            with_encode_key_buf(|key_buf| {
-                let key_size = bincode::encode_into_std_write(key, key_buf, BINCODE_CONFIG)
+        Ok(with_encode_key_buf(|key_buf| {
+            let key_size = bincode::encode_into_std_write(key, key_buf, BINCODE_CONFIG)
+                .expect("encoding can't fail");
+
+            with_encode_value_buf(|value_buf| {
+                let value_size = bincode::encode_into_std_write(value, value_buf, BINCODE_CONFIG)
                     .expect("encoding can't fail");
 
-                with_encode_value_buf(|value_buf| {
-                    let value_size =
-                        bincode::encode_into_std_write(value, value_buf, BINCODE_CONFIG)
-                            .expect("encoding can't fail");
-
-                    self.inner
-                        .insert(&key_buf[..key_size], &value_buf[..value_size])
-                })
+                self.inner
+                    .insert(&key_buf[..key_size], &value_buf[..value_size])
             })
-        }?
+        })?
         .map(AccessGuard::from))
     }
 
@@ -283,13 +240,11 @@ where
         K: Borrow<KQ>,
         KQ: bincode::Encode + ?Sized,
     {
-        Ok(unsafe {
-            with_encode_key_buf(|key_buf| {
-                let key_size = bincode::encode_into_std_write(key, key_buf, BINCODE_CONFIG)
-                    .expect("encoding can't fail");
-                self.inner.remove(&key_buf[..key_size])
-            })
-        }?
+        Ok(with_encode_key_buf(|key_buf| {
+            let key_size = bincode::encode_into_std_write(key, key_buf, BINCODE_CONFIG)
+                .expect("encoding can't fail");
+            self.inner.remove(&key_buf[..key_size])
+        })?
         .map(AccessGuard::from))
     }
 
@@ -314,32 +269,29 @@ where
         Q: bincode::Encode + ?Sized,
         F: for<'f> FnMut(&'f K, &'f V) -> bool,
     {
-        unsafe {
-            with_encode_key_buf(|start_bound_buf| {
-                let start_bound_size = range.start_bound().map(|bound| {
-                    bincode::encode_into_std_write(bound, start_bound_buf, BINCODE_CONFIG)
+        with_encode_key_buf(|start_bound_buf| {
+            let start_bound_size = range.start_bound().map(|bound| {
+                bincode::encode_into_std_write(bound, start_bound_buf, BINCODE_CONFIG)
+                    .expect("encoding can't fail")
+            });
+
+            with_encode_value_buf(|end_bound_buf| {
+                let end_bound_size = range.end_bound().map(|bound| {
+                    bincode::encode_into_std_write(bound, end_bound_buf, BINCODE_CONFIG)
                         .expect("encoding can't fail")
                 });
 
-                with_encode_value_buf(|end_bound_buf| {
-                    let end_bound_size = range.end_bound().map(|bound| {
-                        bincode::encode_into_std_write(bound, end_bound_buf, BINCODE_CONFIG)
-                            .expect("encoding can't fail")
-                    });
+                let start_bound = start_bound_size.map(|size| SortKey(&start_bound_buf[..size]));
+                let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
+                self.inner
+                    .retain_in((start_bound, end_bound), |raw_key, raw_val| {
+                        let k = decode_exact(raw_key).expect("Invalid encoding");
+                        let v = decode_exact(raw_val).expect("Invalid encoding");
+                        predicate(&k, &v)
+                    })?;
 
-                    let start_bound =
-                        start_bound_size.map(|size| SortKey(&start_bound_buf[..size]));
-                    let end_bound = end_bound_size.map(|size| SortKey(&end_bound_buf[..size]));
-                    self.inner
-                        .retain_in((start_bound, end_bound), |raw_key, raw_val| {
-                            let k = decode_exact(raw_key).expect("Invalid encoding");
-                            let v = decode_exact(raw_val).expect("Invalid encoding");
-                            predicate(&k, &v)
-                        })?;
-
-                    Ok(())
-                })
+                Ok(())
             })
-        }
+        })
     }
 }
