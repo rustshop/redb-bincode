@@ -43,6 +43,10 @@ where
     pub fn value_try(&self) -> Result<V, bincode::error::DecodeError> {
         decode_exact(self.inner.value())
     }
+
+    pub(crate) fn validate(&self) {
+        self.value_try().expect("Invalid encoding");
+    }
 }
 
 impl<V, S> AccessGuard<'_, V, SortKey<S>>
@@ -56,5 +60,9 @@ where
 
     pub fn value_try(&self) -> Result<V, bincode::error::DecodeError> {
         decode_exact(self.inner.value())
+    }
+
+    pub(crate) fn validate(&self) {
+        self.value_try().expect("Invalid encoding");
     }
 }

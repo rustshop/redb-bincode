@@ -27,51 +27,59 @@ where
     }
 }
 
-impl<'a, K, V> Iterator for Range<'a, K, V, &'static [u8]> {
+impl<'a, K, V> Iterator for Range<'a, K, V, &'static [u8]>
+where
+    K: bincode::Decode<()>,
+{
     type Item = Result<(AccessGuard<'a, K>, AccessGuard<'a, V>), StorageError>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        Some(
-            self.inner
-                .next()?
-                .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))),
-        )
+        Some(self.inner.next()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 }
 
 impl<'a, S, K, V> Iterator for Range<'a, K, V, SortKey<S>>
 where
     S: SortOrder + fmt::Debug,
+    K: bincode::Decode<()>,
 {
     type Item = Result<(AccessGuard<'a, K, SortKey<S>>, AccessGuard<'a, V>), StorageError>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        Some(
-            self.inner
-                .next()?
-                .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))),
-        )
+        Some(self.inner.next()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 }
-impl<K, V> DoubleEndedIterator for Range<'_, K, V, &'static [u8]> {
+impl<K, V> DoubleEndedIterator for Range<'_, K, V, &'static [u8]>
+where
+    K: bincode::Decode<()>,
+{
     fn next_back(&mut self) -> Option<Self::Item> {
-        Some(
-            self.inner
-                .next_back()?
-                .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))),
-        )
+        Some(self.inner.next_back()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 }
 
 impl<S, K, V> DoubleEndedIterator for Range<'_, K, V, SortKey<S>>
 where
     S: SortOrder + fmt::Debug,
+    K: bincode::Decode<()>,
 {
     fn next_back(&mut self) -> Option<Self::Item> {
-        Some(
-            self.inner
-                .next_back()?
-                .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))),
-        )
+        Some(self.inner.next_back()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 }

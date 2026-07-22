@@ -1,6 +1,7 @@
 use redb_bincode::{Database, TableDefinition, BINCODE_CONFIG};
 
 const TEST_TABLE: TableDefinition<u64, u64> = TableDefinition::new("strict_decode");
+const ONLY_MALFORMED_KEY: TableDefinition<u64, u64> = TableDefinition::new("only_malformed_key");
 
 #[test]
 fn rejects_trailing_key_and_value_bytes() -> anyhow::Result<()> {
@@ -27,6 +28,8 @@ fn rejects_trailing_key_and_value_bytes() -> anyhow::Result<()> {
         let mut raw = write.open_table(TEST_TABLE.as_raw())?;
         raw.insert(trailing_key.as_slice(), canonical_value.as_slice())?;
         raw.insert(second_key.as_slice(), trailing_value.as_slice())?;
+        let mut only_malformed = write.open_table(ONLY_MALFORMED_KEY.as_raw())?;
+        only_malformed.insert(trailing_key.as_slice(), canonical_value.as_slice())?;
     }
     write.commit()?;
 
@@ -38,14 +41,27 @@ fn rejects_trailing_key_and_value_bytes() -> anyhow::Result<()> {
     assert_eq!(canonical_range[0].0.value_try()?, 7);
     assert_eq!(canonical_range[0].1.value_try()?, 70);
 
-    let all = table.range::<u64>(..)?.collect::<Result<Vec<_>, _>>()?;
-    assert_eq!(all.len(), 3);
-    assert!(all.iter().any(|(key, _)| key.value_try().is_err()));
+    let malformed_iteration = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        table
+            .range::<u64>(..)
+            .expect("range opens")
+            .map(|entry| entry.expect("storage remains readable").1.value())
+            .collect::<Vec<_>>()
+    }));
+    assert!(malformed_iteration.is_err());
     assert!(table
         .get(&8)?
         .expect("raw row must exist")
         .value_try()
         .is_err());
+
+    let only_malformed = read.open_table(&ONLY_MALFORMED_KEY)?;
+    assert!(
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| only_malformed.first())).is_err()
+    );
+    assert!(
+        std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| only_malformed.last())).is_err()
+    );
 
     Ok(())
 }

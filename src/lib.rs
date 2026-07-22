@@ -94,20 +94,22 @@ where
     pub fn first(
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
-        Ok(self
-            .inner
-            .first()?
-            .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))))
+        Ok(self.inner.first()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 
     #[allow(clippy::type_complexity)]
     pub fn last(
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
-        Ok(self
-            .inner
-            .last()?
-            .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))))
+        Ok(self.inner.last()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 
     pub fn range<'a, Q>(
@@ -183,20 +185,22 @@ where
     pub fn first(
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
-        Ok(self
-            .inner
-            .first()?
-            .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))))
+        Ok(self.inner.first()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 
     #[allow(clippy::type_complexity)]
     pub fn last(
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
-        Ok(self
-            .inner
-            .last()?
-            .map(|(k, v)| (AccessGuard::from(k), AccessGuard::from(v))))
+        Ok(self.inner.last()?.map(|(k, v)| {
+            let key = AccessGuard::from(k);
+            key.validate();
+            (key, AccessGuard::from(v))
+        }))
     }
 
     pub fn range<'a, Q>(
