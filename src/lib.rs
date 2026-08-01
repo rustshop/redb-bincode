@@ -5,8 +5,6 @@ mod database;
 mod range;
 mod readable_table;
 mod scratch_buffer;
-#[cfg(test)]
-mod scratch_buffer_tests;
 mod sort;
 mod tx;
 
@@ -65,8 +63,7 @@ where
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
         Ok(self.inner.first()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K, SortKey<S>>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }
@@ -76,8 +73,7 @@ where
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
         Ok(self.inner.last()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K, SortKey<S>>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }
@@ -151,8 +147,7 @@ where
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
         Ok(self.inner.first()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K, SortKey<S>>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }
@@ -162,8 +157,7 @@ where
         &self,
     ) -> Result<Option<(AccessGuard<'_, K, SortKey<S>>, AccessGuard<'_, V>)>, StorageError> {
         Ok(self.inner.last()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K, SortKey<S>>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }

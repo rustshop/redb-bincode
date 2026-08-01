@@ -2,6 +2,9 @@ use std::cell::{RefCell, RefMut};
 use std::ops::{Deref, DerefMut};
 use std::thread::LocalKey;
 
+#[cfg(test)]
+mod tests;
+
 thread_local! {
     static ENCODE_KEY: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };
     static ENCODE_VALUE: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };

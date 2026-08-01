@@ -36,16 +36,18 @@ impl<V> AccessGuard<'_, V>
 where
     V: bincode::Decode<()>,
 {
+    pub(crate) fn from_key<'a>(inner: redb::AccessGuard<'a, &'static [u8]>) -> AccessGuard<'a, V> {
+        let key = AccessGuard::from(inner);
+        key.value_try().expect("Invalid encoding");
+        key
+    }
+
     pub fn value(&self) -> V {
         self.value_try().expect("Invalid encoding")
     }
 
     pub fn value_try(&self) -> Result<V, bincode::error::DecodeError> {
         decode_exact(self.inner.value())
-    }
-
-    pub(crate) fn validate(&self) {
-        self.value_try().expect("Invalid encoding");
     }
 }
 
@@ -54,15 +56,19 @@ where
     V: bincode::Decode<()>,
     S: SortOrder + fmt::Debug,
 {
+    pub(crate) fn from_key<'a>(
+        inner: redb::AccessGuard<'a, SortKey<S>>,
+    ) -> AccessGuard<'a, V, SortKey<S>> {
+        let key = AccessGuard::from(inner);
+        key.value_try().expect("Invalid encoding");
+        key
+    }
+
     pub fn value(&self) -> V {
         self.value_try().expect("Invalid encoding")
     }
 
     pub fn value_try(&self) -> Result<V, bincode::error::DecodeError> {
         decode_exact(self.inner.value())
-    }
-
-    pub(crate) fn validate(&self) {
-        self.value_try().expect("Invalid encoding");
     }
 }

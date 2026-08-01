@@ -35,8 +35,7 @@ where
 
     fn next(&mut self) -> Option<Self::Item> {
         Some(self.inner.next()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }
@@ -51,8 +50,7 @@ where
 
     fn next(&mut self) -> Option<Self::Item> {
         Some(self.inner.next()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K, SortKey<S>>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }
@@ -63,8 +61,7 @@ where
 {
     fn next_back(&mut self) -> Option<Self::Item> {
         Some(self.inner.next_back()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }
@@ -77,8 +74,7 @@ where
 {
     fn next_back(&mut self) -> Option<Self::Item> {
         Some(self.inner.next_back()?.map(|(k, v)| {
-            let key = AccessGuard::from(k);
-            key.validate();
+            let key = AccessGuard::<K, SortKey<S>>::from_key(k);
             (key, AccessGuard::from(v))
         }))
     }

@@ -8,6 +8,21 @@ much more convenient.
 It does also include a couple of minor deviations from `redb`, but stays
 faithful to the original API.
 
+
+## Persistent-data compatibility
+
+Typed reads require each stored key and value slice to contain exactly one
+complete `bincode` item. Trailing bytes are rejected rather than ignored.
+
+Values remain lazily decoded: `AccessGuard::value_try()` reports malformed
+values as `bincode::error::DecodeError`, while `AccessGuard::value()` panics.
+Keys are different because they define table order. `first()`, `last()`, and
+both directions of range iteration validate each key before yielding its
+entry and panic on malformed keys, even when the caller reads only values.
+Applications that may open untrusted or corrupted database files must validate
+or recover them through raw `redb` APIs before using typed access.
+
+
 ## Encoder scratch-buffer behavior
 
 Typed table operations reuse separate key and value buffers on each thread.

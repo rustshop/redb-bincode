@@ -1,6 +1,11 @@
 use std::panic::{catch_unwind, AssertUnwindSafe};
 
-use crate::scratch_buffer::{with_encode_key_buf, with_encode_value_buf};
+use super::{with_encode_key_buf, with_encode_value_buf, ENCODE_KEY, ENCODE_VALUE};
+
+fn assert_buffers_empty() {
+    ENCODE_KEY.with(|buffer| assert!(buffer.borrow().is_empty()));
+    ENCODE_VALUE.with(|buffer| assert!(buffer.borrow().is_empty()));
+}
 
 #[test]
 fn same_role_reentrancy_panics_without_aliasing_and_clears_outer_state() {
@@ -11,12 +16,13 @@ fn same_role_reentrancy_panics_without_aliasing_and_clears_outer_state() {
         });
     }));
     assert!(key_panic.is_err());
+    assert_buffers_empty();
 
     with_encode_key_buf(|buffer| {
         assert!(buffer.is_empty());
         buffer.extend_from_slice(b"usable");
     });
-    with_encode_key_buf(|buffer| assert!(buffer.is_empty()));
+    assert_buffers_empty();
 
     let value_panic = catch_unwind(AssertUnwindSafe(|| {
         with_encode_value_buf(|outer| {
@@ -25,7 +31,7 @@ fn same_role_reentrancy_panics_without_aliasing_and_clears_outer_state() {
         });
     }));
     assert!(value_panic.is_err());
-    with_encode_value_buf(|buffer| assert!(buffer.is_empty()));
+    assert_buffers_empty();
 }
 
 #[test]
@@ -37,7 +43,7 @@ fn callback_panic_clears_key_and_value_state() {
         });
     }));
     assert!(key_panic.is_err());
-    with_encode_key_buf(|buffer| assert!(buffer.is_empty()));
+    assert_buffers_empty();
 
     let value_panic = catch_unwind(AssertUnwindSafe(|| {
         with_encode_value_buf(|buffer| {
@@ -46,7 +52,7 @@ fn callback_panic_clears_key_and_value_state() {
         });
     }));
     assert!(value_panic.is_err());
-    with_encode_value_buf(|buffer| assert!(buffer.is_empty()));
+    assert_buffers_empty();
 }
 
 #[test]
@@ -61,6 +67,25 @@ fn distinct_key_and_value_buffers_support_nested_access() {
         assert_eq!(key, b"key");
     });
 
-    with_encode_key_buf(|key| assert!(key.is_empty()));
-    with_encode_value_buf(|value| assert!(value.is_empty()));
+    assert_buffers_empty();
+}
+
+#[test]
+fn success_and_error_results_clear_key_and_value_state() {
+    with_encode_key_buf(|buffer| buffer.extend_from_slice(b"success"));
+    with_encode_value_buf(|buffer| buffer.extend_from_slice(b"success"));
+    assert_buffers_empty();
+
+    let key_error = with_encode_key_buf(|buffer| {
+        buffer.extend_from_slice(b"error");
+        Err::<(), _>("simulated storage error")
+    });
+    assert_eq!(key_error, Err("simulated storage error"));
+
+    let value_error = with_encode_value_buf(|buffer| {
+        buffer.extend_from_slice(b"error");
+        Err::<(), _>("simulated storage error")
+    });
+    assert_eq!(value_error, Err("simulated storage error"));
+    assert_buffers_empty();
 }
