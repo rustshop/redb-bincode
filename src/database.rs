@@ -17,10 +17,12 @@ impl Database {
         Ok(Self(redb::Database::open(path)?))
     }
 
+    #[allow(clippy::result_large_err)]
     pub fn begin_read(&self) -> Result<tx::ReadTransaction, TransactionError> {
         Ok(ReadTransaction::from(self.0.begin_read()?))
     }
 
+    #[allow(clippy::result_large_err)]
     pub fn begin_write(&self) -> Result<tx::WriteTransaction, TransactionError> {
         Ok(WriteTransaction::from(self.0.begin_write()?))
     }

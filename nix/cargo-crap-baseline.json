@@ -1,0 +1,609 @@
+{
+  "$schema": "https://raw.githubusercontent.com/minikin/cargo-crap/main/schemas/report-v1.json",
+  "version": "0.3.0",
+  "entries": [
+    {
+      "file": "/build/source/src/range.rs",
+      "function": "Range::next",
+      "line": 36,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/range.rs",
+      "function": "Range::next_back",
+      "line": 64,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/range.rs",
+      "function": "Range::next_back",
+      "line": 78,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::open",
+      "line": 16,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::first",
+      "line": 150,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::last",
+      "line": 161,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::range",
+      "line": 171,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::remove",
+      "line": 238,
+      "cyclomatic": 2.0,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "decode_exact",
+      "line": 34,
+      "cyclomatic": 3.0,
+      "coverage": 100.0,
+      "crap": 3.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "ScratchBufferGuard::deref",
+      "line": 24,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/range.rs",
+      "function": "Range::next",
+      "line": 52,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::create",
+      "line": 12,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::begin_read",
+      "line": 20,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::begin_write",
+      "line": 24,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::as_raw_mut",
+      "line": 32,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::from",
+      "line": 38,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::validate",
+      "line": 47,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::value",
+      "line": 57,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "ReadTransaction::as_raw",
+      "line": 17,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "ReadTransaction::open_table",
+      "line": 20,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "TableDefinition::new",
+      "line": 53,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "WriteTransaction::as_raw",
+      "line": 67,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "WriteTransaction::open_table",
+      "line": 71,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "ReadOnlyTable::first",
+      "line": 47,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "ReadOnlyTable::last",
+      "line": 54,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "ReadOnlyTable::range",
+      "line": 60,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "ReadOnlyTable::get",
+      "line": 71,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "Table::first",
+      "line": 87,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "Table::last",
+      "line": 94,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "Table::range",
+      "line": 100,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/readable_table.rs",
+      "function": "Table::get",
+      "line": 111,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "ReadOnlyTable::as_raw",
+      "line": 59,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "ReadOnlyTable::first",
+      "line": 64,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "ReadOnlyTable::last",
+      "line": 75,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "ReadOnlyTable::range",
+      "line": 85,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "ReadOnlyTable::get",
+      "line": 113,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::as_raw",
+      "line": 142,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::as_raw_mut",
+      "line": 145,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::get",
+      "line": 199,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::insert",
+      "line": 212,
+      "cyclomatic": 2.0,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::retain",
+      "line": 251,
+      "cyclomatic": 1.0,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "ScratchBufferGuard::new",
+      "line": 15,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "ScratchBufferGuard::deref_mut",
+      "line": 30,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "ScratchBufferGuard::drop",
+      "line": 36,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "with_scratch_buffer",
+      "line": 41,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "with_encode_key_buf",
+      "line": 55,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/scratch_buffer.rs",
+      "function": "with_encode_value_buf",
+      "line": 59,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/range.rs",
+      "function": "Range::from",
+      "line": 21,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "Lexicographical::compare",
+      "line": 12,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "SortKey::borrow",
+      "line": 21,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "SortKey::fixed_width",
+      "line": 40,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "SortKey::from_bytes",
+      "line": 44,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "SortKey::as_bytes",
+      "line": 51,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "SortKey::type_name",
+      "line": 59,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/sort.rs",
+      "function": "SortKey::compare",
+      "line": 68,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/database.rs",
+      "function": "Database::as_raw",
+      "line": 29,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::from",
+      "line": 15,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::from",
+      "line": 27,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::value",
+      "line": 39,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::value_try",
+      "line": 43,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::value_try",
+      "line": 61,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/access_guard.rs",
+      "function": "AccessGuard::validate",
+      "line": 65,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "ReadTransaction::from",
+      "line": 11,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "WriteTransaction::from",
+      "line": 41,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "TableDefinition::as_raw",
+      "line": 61,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/tx.rs",
+      "function": "WriteTransaction::commit",
+      "line": 88,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    },
+    {
+      "file": "/build/source/src/lib.rs",
+      "function": "Table::retain_in",
+      "line": 262,
+      "cyclomatic": 1.0,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "crate": "redb-bincode"
+    }
+  ]
+}

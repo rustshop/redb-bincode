@@ -7,13 +7,13 @@ authors = ["Dawid Ciężarkiewicz <dpc@dpc.pw>"]
 description = "`redb` + `bincode` wrapper around `redb`"
 documentation = "https://github.com/rustshop/redb-bincode"
 homepage = "https://github.com/rustshop/redb-bincode"
-keywords = ["database", "redb", "bincode"]
+keywords = ["bincode", "database", "redb"]
 readme = "README.md"
 repository = "https://github.com/rustshop/redb-bincode"
 
 [dependencies]
-redb = "2.0.0"
 bincode = "2.0.0"
+redb = "2.0.0"
 thiserror = "1.0.58"
 
 [dev-dependencies]
@@ -25,13 +25,14 @@ debug = "line-tables-only"
 lto = "off"
 
 [profile.ci]
-inherits = "dev"
 incremental = false
+inherits = "dev"
+lto = "off"
 
 [profile.release]
+codegen-units = 1
 debug = "line-tables-only"
 lto = "fat"
-codegen-units = 1
 
 # Workaround: https://github.com/rust-lang/cargo/issues/12457 which causes
 #             https://github.com/ipetkov/crane/issues/370

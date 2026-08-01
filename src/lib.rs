@@ -139,7 +139,7 @@ where
     K: bincode::Encode + bincode::Decode<()>,
     V: bincode::Encode + bincode::Decode<()>,
 {
-    pub fn as_raw(&self) -> &redb::Table<sort::SortKey<S>, &'static [u8]> {
+    pub fn as_raw(&self) -> &redb::Table<'_, sort::SortKey<S>, &'static [u8]> {
         &self.inner
     }
     pub fn as_raw_mut(&mut self) -> &'txn mut redb::Table<'_, sort::SortKey<S>, &'static [u8]> {

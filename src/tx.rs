@@ -71,7 +71,7 @@ impl WriteTransaction {
     pub fn open_table<K, V>(
         &self,
         table_def: &TableDefinition<'_, K, V>,
-    ) -> Result<Table<K, V, sort::Lexicographical>, TableError>
+    ) -> Result<Table<'_, K, V, sort::Lexicographical>, TableError>
     where
         K: bincode::Encode + bincode::Decode<()>,
         V: bincode::Encode + bincode::Decode<()>,

@@ -1,0 +1,13 @@
+[formatter.nix]
+command = "nixfmt"
+includes = ["*.nix"]
+
+[formatter.rust]
+command = "rustfmt"
+includes = ["*.rs"]
+options = ["--edition", "2021"]
+
+[formatter.toml]
+command = "taplo"
+includes = ["*.toml"]
+options = ["format"]
